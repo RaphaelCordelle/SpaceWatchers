@@ -6,6 +6,12 @@ SpaceWatchers récupère des positions de satellites auprès de l’API N2YO et 
 
 Nous avons réalisé ce projet à deux, avec Victor Laurini, en terminale. Notre projet a obtenu un **Prix Coup de cœur académique** et une **deuxième place nationale** aux Trophées NSI 2025.
 
+## Exemple de résultat
+
+![Résultat d’un essai de SpaceWatchers avec les fichiers de satellites et de comptes API](docs/images/spacewatchers-resultat.png)
+
+Capture d’un essai réalisé avec les données récupérées auprès de N2YO. L’application affiche les deux satellites retenus et leurs coordonnées. La distance affichée provient du calcul d’origine et ne constitue pas une mesure physique validée en kilomètres.
+
 ## Mon travail sur le projet
 
 Je me suis occupé de la lecture des fichiers CSV et de l’extraction des identifiants NORAD utilisés pour les requêtes. J’ai également développé la recherche récursive de proximité, nommée `Karatsuba` dans notre code, et les fonctions de comparaison associées.

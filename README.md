@@ -56,6 +56,10 @@ Dans la fenêtre :
 
 Les CSV sont séparés par des points-virgules. Conserver le fichier de clé hors du dépôt et commencer avec quelques satellites seulement. Les exemples ne contiennent aucune clé réelle.
 
+Lors du projet, nous utilisions plusieurs comptes API avec l’autorisation obtenue pour ces essais. Ces comptes et leurs clés ne sont pas partagés dans le dépôt. Pour tester aujourd’hui, créez votre propre compte N2YO : une seule clé suffit pour essayer la petite liste de satellites fournie, dans les limites du service.
+
+Exemple : copiez `compte.example.csv` hors du dépôt, remplacez `REMPLACER_PAR_VOTRE_CLE` par votre clé, puis sélectionnez ce fichier et `satellites.example.csv` dans l’application.
+
 ## État du projet
 
 Le dépôt conserve le programme de terminale, avec deux adaptations de publication : le fond d’écran est facultatif et le lancement de la fenêtre est isolé du reste du fichier. L’image et le catalogue d’origine ne sont pas distribués ; un petit CSV d’exemple est fourni. Cela permet de faciliter leur lancement pour quelqu'un n'ayant pas d'image.

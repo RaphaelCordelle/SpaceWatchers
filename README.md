@@ -4,7 +4,7 @@
 
 SpaceWatchers récupère des positions de satellites auprès de l’API N2YO et recherche une paire de satellites proches parmi les données reçues. Une interface Tkinter permet de choisir la liste à analyser, de lancer le traitement et de consulter le résultat.
 
-Nous avons réalisé ce projet à deux, avec Victor Laurini, en terminale. Il a obtenu un **Prix Coup de cœur académique** et une **distinction nationale** aux Trophées NSI 2025.
+Nous avons réalisé ce projet à deux, avec Victor Laurini, en terminale. Notre projet a obtenu un **Prix Coup de cœur académique** et une **deuxième place nationale** aux Trophées NSI 2025.
 
 ## Mon travail sur le projet
 
@@ -34,7 +34,7 @@ La récupération se fait à la demande, sans suivi continu. Le [fonctionnement 
 
 ## Lancer le projet
 
-Prérequis : Python avec Tkinter, une connexion Internet et une clé personnelle [N2YO](https://www.n2yo.com/api/). Les commandes suivantes utilisent directement le Python de l’environnement virtuel, sans activation préalable.
+Prérequis : Python avec Tkinter, une connexion Internet assez rapide et une clé personnelle [N2YO](https://www.n2yo.com/api/). Les commandes suivantes utilisent directement le Python de l’environnement virtuel, sans activation préalable.
 
 Sous Windows, depuis PowerShell :
 
@@ -58,11 +58,11 @@ Les CSV sont séparés par des points-virgules. Conserver le fichier de clé hor
 
 ## État du projet
 
-Le dépôt conserve le programme de terminale, avec deux adaptations de publication : le fond d’écran est facultatif et le lancement de la fenêtre est isolé du reste du fichier. L’image et le catalogue d’origine ne sont pas distribués ; un petit CSV d’exemple est fourni.
+Le dépôt conserve le programme de terminale, avec deux adaptations de publication : le fond d’écran est facultatif et le lancement de la fenêtre est isolé du reste du fichier. L’image et le catalogue d’origine ne sont pas distribués ; un petit CSV d’exemple est fourni. Cela permet de faciliter leur lancement pour quelqu'un n'ayant pas d'image.
 
 Le calcul actuel combine latitude, longitude et altitude sans conversion dans un repère commun. Malgré l’unité affichée par le programme, il ne fournit donc pas une distance physique fiable en kilomètres. Le projet n’est pas un outil de prévision des collisions.
 
-Les principales suites possibles sont de corriger ce calcul, de mieux gérer les erreurs réseau et de rendre l’interface plus réactive. Le code contient aussi une rotation de clés qui doit être revue : N2YO interdit leur utilisation pour contourner les quotas. Les essais doivent rester dans les limites d’une seule clé autorisée.
+Les principales suites possibles sont de corriger ce calcul, de mieux gérer les erreurs réseau et de rendre l’interface plus réactive.
 
 ## Fichiers du dépôt
 

@@ -1,0 +1,24 @@
+# Environnement Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+
+# Secrets et fichiers locaux
+.env
+.env.*
+!.env.example
+id_compte.csv
+*api*key*.csv
+data/private/
+
+# Fichiers d'origine non destinés au dépôt public
+répertoire data/
+*.docx
+background.jpg
+
+# Outils et système
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db

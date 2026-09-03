@@ -1,112 +1,77 @@
 # SpaceWatchers
 
-SpaceWatchers est un projet réalisé en terminale, en binôme, dans le cadre des Trophées NSI 2025.
+**Projet de terminale NSI · Python · Trophées NSI 2025**
 
-Le but était de créer une application capable de récupérer la position de satellites grâce à l’API N2YO, puis de rechercher les deux satellites les plus proches dans les données obtenues. Le résultat est affiché dans une interface graphique développée avec Tkinter.
+SpaceWatchers récupère des positions de satellites auprès de l’API N2YO et recherche une paire de satellites proches parmi les données reçues. Une interface Tkinter permet de choisir la liste à analyser, de lancer le traitement et de consulter le résultat.
 
-Le projet a reçu un **Prix Coup de cœur académique** puis une **distinction nationale** aux Trophées NSI 2025.
+Nous avons réalisé ce projet à deux, avec Victor Laurini, en terminale. Il a obtenu un **Prix Coup de cœur académique** et une **distinction nationale** aux Trophées NSI 2025.
 
-## Fonctionnement
+## Mon travail sur le projet
 
-L’utilisateur sélectionne deux fichiers CSV :
+Je me suis occupé de la lecture des fichiers CSV et de l’extraction des identifiants NORAD utilisés pour les requêtes. J’ai également développé la recherche récursive de proximité, nommée `Karatsuba` dans notre code, et les fonctions de comparaison associées.
 
-- une liste de satellites contenant leurs identifiants NORAD ;
-- un fichier local contenant la clé nécessaire pour interroger l’API.
+L’application réunit ce travail et l’interface graphique réalisée dans le cadre du binôme.
 
-Le programme récupère ensuite les positions des satellites, stocke les réponses reçues au format JSON et applique un algorithme récursif de recherche de proximité. Plusieurs requêtes peuvent être envoyées en parallèle pour éviter de les traiter une par une.
+## Du fichier satellite au résultat
 
-```text
-Fichiers CSV
-    ↓
-Requêtes vers l’API N2YO
-    ↓
-Récupération des positions
-    ↓
-Recherche récursive de la paire la plus proche
-    ↓
-Affichage du résultat avec Tkinter
-```
+1. **Sélection des données.** L’utilisateur choisit un CSV de satellites et un fichier local contenant sa clé N2YO.
+2. **Récupération des positions.** Le programme extrait les identifiants NORAD, interroge l’API et regroupe les réponses. Les requêtes sont envoyées par lots avec `ThreadPoolExecutor`.
+3. **Recherche de proximité.** Les positions sont réparties en deux groupes. Le programme recherche une paire dans chaque groupe, puis compare les points situés autour de la séparation.
+4. **Affichage.** La fenêtre présente les noms des deux satellites retenus, leurs coordonnées et le résultat du calcul.
 
-## Ma contribution
+La récupération se fait à la demande, sans suivi continu. Le [fonctionnement détaillé](docs/fonctionnement.md) reprend les étapes du traitement et leur correspondance avec le code.
 
-Je me suis principalement occupé de :
+## Technologies
 
-- la lecture des fichiers CSV ;
-- l’extraction des identifiants NORAD ;
-- l’organisation des données récupérées ;
-- l’algorithme récursif nommé `Karatsuba` dans le code et des fonctions de comparaison associées.
+| Élément | Utilisation |
+| --- | --- |
+| Python | Lecture des données et algorithme de recherche |
+| Requests / API N2YO | Récupération des positions par HTTP |
+| Tkinter | Sélection des fichiers et affichage |
+| ThreadPoolExecutor | Exécution concurrente des requêtes |
+| Pillow | Image de fond facultative |
+| CSV / JSON | Fichiers d’entrée et réponses de l’API |
 
-L’interface graphique a été réalisée dans le cadre du travail en groupe, mais je n’en ai pas développé seul l’ensemble.
+## Lancer le projet
 
-## Technologies utilisées
+Prérequis : Python avec Tkinter, une connexion Internet et une clé personnelle [N2YO](https://www.n2yo.com/api/). Les commandes suivantes utilisent directement le Python de l’environnement virtuel, sans activation préalable.
 
-- **Python** pour le traitement principal ;
-- **Tkinter** pour l’interface graphique ;
-- **Requests** pour les appels à l’API N2YO ;
-- **ThreadPoolExecutor** pour lancer plusieurs requêtes ;
-- **Pillow** pour la gestion de l’image de fond ;
-- fichiers **CSV** pour les données d’entrée ;
-- réponses **JSON** pour les données reçues de l’API.
+Sous Windows, depuis PowerShell :
 
-## Installation
-
-Python 3.8 ou une version plus récente est recommandé.
-
-```bash
+```powershell
 git clone https://github.com/RaphaelCordelle/SpaceWatchers.git
 cd SpaceWatchers
 python -m venv .venv
-python -m pip install -r requirements.txt
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+.\.venv\Scripts\python.exe main.py
 ```
 
-Il faut ensuite activer l’environnement virtuel selon le système utilisé.
+Sous Linux ou macOS, remplacer `.\.venv\Scripts\python.exe` par `.venv/bin/python`.
 
-## Utilisation
+Dans la fenêtre :
 
-1. Préparer un fichier CSV contenant une colonne `NORAD Number`.
-2. Préparer séparément un fichier CSV contenant une colonne `api id` et sa propre clé N2YO.
-3. Lancer l’application avec `python main.py`.
-4. Sélectionner les deux fichiers dans la fenêtre.
-5. Cliquer sur **Commencer**.
+- choisir [`examples/satellites.example.csv`](examples/satellites.example.csv) ou un CSV comportant une colonne `NORAD Number` ;
+- choisir son fichier de clé, construit à partir de [`compte.example.csv`](examples/compte.example.csv), avec une colonne `api id` ;
+- cliquer sur **Commencer**.
 
-Des modèles sont disponibles dans le dossier [`examples`](examples/). La valeur présente dans `compte.example.csv` est volontairement fictive.
+Les CSV sont séparés par des points-virgules. Conserver le fichier de clé hors du dépôt et commencer avec quelques satellites seulement. Les exemples ne contiennent aucune clé réelle.
 
-Pour un premier essai, il est préférable d’utiliser seulement quelques satellites afin de ne pas envoyer trop de requêtes.
+## État du projet
 
-## Organisation du dépôt
+Le dépôt conserve le programme de terminale, avec deux adaptations de publication : le fond d’écran est facultatif et le lancement de la fenêtre est isolé du reste du fichier. L’image et le catalogue d’origine ne sont pas distribués ; un petit CSV d’exemple est fourni.
 
-```text
-SpaceWatchers/
-├── main.py
-├── requirements.txt
-├── examples/
-│   ├── satellites.example.csv
-│   └── compte.example.csv
-├── docs/
-│   └── fonctionnement.md
-├── AUTHORS.md
-├── SECURITY.md
-└── LICENSE
-```
+Le calcul actuel combine latitude, longitude et altitude sans conversion dans un repère commun. Malgré l’unité affichée par le programme, il ne fournit donc pas une distance physique fiable en kilomètres. Le projet n’est pas un outil de prévision des collisions.
 
-Le fichier [`docs/fonctionnement.md`](docs/fonctionnement.md) explique plus précisément le rôle des fonctions et le chemin suivi par les données.
+Les principales suites possibles sont de corriger ce calcul, de mieux gérer les erreurs réseau et de rendre l’interface plus réactive. Le code contient aussi une rotation de clés qui doit être revue : N2YO interdit leur utilisation pour contourner les quotas. Les essais doivent rester dans les limites d’une seule clé autorisée.
 
-## Limites actuelles
+## Fichiers du dépôt
 
-Cette version correspond au projet réalisé en terminale. Elle permet de travailler sur les données satellites, mais ce n’est pas un outil de prévention des collisions.
+- [`main.py`](main.py) : interface, acquisition des données et recherche de proximité ;
+- [`docs/fonctionnement.md`](docs/fonctionnement.md) : déroulement du traitement ;
+- [`examples/`](examples/) : modèles de fichiers d’entrée ;
+- [`requirements.txt`](requirements.txt) : dépendances Python ;
+- [`SECURITY.md`](SECURITY.md) : précautions concernant les clés API.
 
-Le calcul historique compare directement latitude, longitude et altitude. Ces valeurs ne sont pas exprimées dans la même unité : le résultat ne doit donc pas être considéré comme une distance physique précise en kilomètres. Une amélioration possible serait de convertir les positions dans un même repère avant de les comparer.
+**Auteurs :** Raphael Cordelle et Victor Laurini — [contributions](AUTHORS.md).
 
-La gestion des erreurs réseau, des quotas de l’API et des tâches de fond dans l’interface pourrait également être améliorée.
-
-## Sécurité
-
-Les clés API sont personnelles et ne doivent jamais être publiées. Le fichier utilisé localement est exclu du dépôt grâce au `.gitignore`.
-
-La documentation N2YO demande aussi de respecter les limites du service et de ne pas utiliser plusieurs clés pour contourner les quotas. Les précautions sont détaillées dans [`SECURITY.md`](SECURITY.md).
-
-## Auteurs
-
-Projet réalisé par **Raphael Cordelle** et **Victor Laurini**.
-
-La répartition de notre travail est précisée dans [`AUTHORS.md`](AUTHORS.md).
+**Licence :** GNU GPL v3 ou ultérieure, conformément à la notice d’origine — [texte de la licence](LICENSE).

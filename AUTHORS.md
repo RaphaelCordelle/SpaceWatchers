@@ -1,17 +1,9 @@
 # Auteurs
 
-SpaceWatchers a été réalisé en terminale, en groupe de deux, par :
+Projet réalisé en terminale par **Raphael Cordelle** et **Victor Laurini**.
 
-- Raphael Cordelle ;
-- Victor Laurini.
+Raphael a développé la lecture des CSV, l’extraction des identifiants NORAD et la recherche récursive de proximité nommée `Karatsuba` dans le code, avec les fonctions de comparaison associées.
 
-## Contribution de Raphael Cordelle
+L’interface graphique relève du travail en binôme ; elle n’a pas été entièrement développée par Raphael.
 
-Raphael Cordelle a développé personnellement :
-
-- la lecture des fichiers CSV et l’extraction des données utilisées par le programme ;
-- l’algorithme récursif nommé `Karatsuba` dans le code, ainsi que les fonctions de comparaison associées.
-
-L’interface graphique a été réalisée dans le cadre du travail en groupe ; Raphael Cordelle n’en a pas développé seul l’ensemble.
-
-La documentation GitHub et les petites adaptations de publication ont été préparées ultérieurement à partir du projet d’origine.
+La préparation du dépôt et de sa documentation a été réalisée après le projet scolaire.

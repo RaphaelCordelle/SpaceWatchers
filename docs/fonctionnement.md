@@ -59,6 +59,6 @@ Le programme réalise une analyse ponctuelle. Il n’affiche pas de carte, ne ra
 - **Sélection des paires.** Le filtre de noms peut exclure des objets distincts d’une même famille. Il faudrait préciser ce critère et le distinguer de la suppression des doublons NORAD.
 - **Fiabilité du traitement.** Les listes vides, les réponses incomplètes, les erreurs HTTP et l’épuisement du quota doivent être gérés explicitement. Les appels réseau peuvent aussi bloquer l’interface.
 
-Des essais isolés ont comparé la recherche récursive à une comparaison exhaustive sur des données synthétiques, avec la même formule et le même filtre. Ils ne valident ni les distances physiques ni le fonctionnement complet avec N2YO. Aucune suite de tests automatisés n’est actuellement fournie dans le dépôt.
+Des essais isolés ont comparé la recherche récursive à une comparaison exhaustive sur des données synthétiques, avec la même formule et le même filtre. Ils ne valident ni les distances physiques ni le fonctionnement complet avec N2YO. Aucune suite de tests automatisés n’est actuellement fournie dans le dépôt final.
 
 Référence : [documentation de l’API N2YO](https://www.n2yo.com/api/).

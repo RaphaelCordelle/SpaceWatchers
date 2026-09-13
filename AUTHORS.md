@@ -1,6 +1,6 @@
 # Auteurs
 
-Projet réalisé en terminale par **Raphael Cordelle** et **Victor Laurini**.
+Projet réalisé en terminale par **Raphael Cordelle** et **Victor Laurini**, dans le cadre des Trophées NSI 2025.
 
 J'ai développé la lecture des CSV, l’extraction des identifiants NORAD et la recherche récursive de proximité nommée `Karatsuba` dans le code, avec les fonctions de comparaison associées.
 

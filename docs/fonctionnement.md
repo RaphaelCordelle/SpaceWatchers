@@ -1,6 +1,6 @@
 # Fonctionnement de SpaceWatchers
 
-SpaceWatchers enchaîne la lecture d’une liste de satellites, la récupération de leurs positions et la recherche d’une paire proche. Le traitement est regroupé dans `main.py`, avec une interface Tkinter et des fonctions dédiées aux données et au calcul.
+SpaceWatchers enchaîne la lecture d’une liste de satellites en orbite terrestre, la récupération de leurs positions via l'API N2YO et la recherche d’une paire de satellites proches l'un de l'autre. Le traitement est regroupé dans `main.py`, avec une interface Tkinter et des fonctions dédiées aux données et au calcul.
 
 ## Entrées et résultat
 
@@ -10,7 +10,7 @@ SpaceWatchers enchaîne la lecture d’une liste de satellites, la récupératio
 | CSV de configuration local | Clé N2YO de la colonne `api id` |
 | Réponses de l’API | Nom, identifiant, latitude, longitude et altitude |
 
-À la fin du traitement, la fenêtre affiche la paire retenue, ses coordonnées et le résultat de la comparaison. Les réponses sont conservées en mémoire ; le programme ne crée pas de base de données ni de fichier de résultats.
+À la fin du traitement, la fenêtre affiche la paire de satellites retenue, leurs coordonnées et le résultat de la comparaison. Les réponses sont conservées en mémoire ; le programme ne crée pas de base de données ni de fichier de résultats.
 
 ## 1. Lecture des fichiers
 
@@ -26,11 +26,11 @@ Les appels sont lancés par lots avec `ThreadPoolExecutor`, puis leurs réponses
 
 `get_position` extrait ensuite les coordonnées de chaque réponse et les associe au nom et à l’identifiant du satellite. Les horodatages ne sont pas conservés : des réponses récupérées successivement ne représentent pas nécessairement le même instant.
 
-## 3. Recherche de la paire
+## 3. Recherche de la paire de satellites proches l'un de l'autre
 
 La recherche suit une approche « diviser pour régner » :
 
-1. trier les positions selon la latitude ;
+1. trier les positions des satellites selon la latitude ;
 2. séparer l’ensemble en deux groupes ;
 3. rechercher récursivement la meilleure paire dans chacun ;
 4. comparer les points dans une bande autour de la séparation ;
@@ -49,7 +49,7 @@ Pour un groupe de trois points ou moins, les paires sont comparées directement.
 
 ## 4. Affichage
 
-`affichage` construit le message final avec les noms et coordonnées de la paire. `SatelliteInterface` prend en charge la sélection des fichiers, le message de progression et la zone de résultat.
+`affichage` construit le message final avec les noms et coordonnées de la paire de satellites. `SatelliteInterface` prend en charge la sélection des fichiers, le message de progression et la zone de résultat.
 
 Le programme réalise une analyse ponctuelle. Il n’affiche pas de carte, ne rafraîchit pas continuellement les positions et ne prédit pas de trajectoire.
 

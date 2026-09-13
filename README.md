@@ -2,7 +2,7 @@
 
 **Projet de terminale NSI · Python · Trophées NSI 2025**
 
-SpaceWatchers récupère des positions de satellites auprès de l’API N2YO et recherche une paire de satellites proches parmi les données reçues. Une interface Tkinter permet de choisir la liste à analyser, de lancer le traitement et de consulter le résultat.
+SpaceWatchers récupère des positions de satellites auprès de l’API N2YO et recherche une paire de satellites proches l'un de l'autre parmi les données reçues. Une interface Tkinter permet de choisir la liste de satellites à analyser, de lancer le traitement et de consulter le résultat.
 
 Nous avons réalisé ce projet à deux, avec Victor Laurini, en terminale. Notre projet a obtenu un **Prix Coup de cœur académique** et une **deuxième place nationale** aux Trophées NSI 2025.
 
@@ -22,7 +22,7 @@ L’application réunit ce travail et l’interface graphique réalisée dans le
 
 1. **Sélection des données.** L’utilisateur choisit un CSV de satellites et un fichier local contenant sa clé N2YO.
 2. **Récupération des positions.** Le programme extrait les identifiants NORAD, interroge l’API et regroupe les réponses. Les requêtes sont envoyées par lots avec `ThreadPoolExecutor`.
-3. **Recherche de proximité.** Les positions sont réparties en deux groupes. Le programme recherche une paire dans chaque groupe, puis compare les points situés autour de la séparation.
+3. **Recherche de proximité.** Les positions des satellites sont réparties en deux groupes. Le programme recherche une paire de satellites dans chaque groupe, puis compare les points situés autour de la séparation.
 4. **Affichage.** La fenêtre présente les noms des deux satellites retenus, leurs coordonnées et le résultat du calcul.
 
 La récupération se fait à la demande, sans suivi continu. Le [fonctionnement détaillé](docs/fonctionnement.md) reprend les étapes du traitement et leur correspondance avec le code.

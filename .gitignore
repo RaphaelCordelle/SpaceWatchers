@@ -7,7 +7,6 @@ __pycache__/
 # Secrets et fichiers locaux
 .env
 .env.*
-!.env.example
 id_compte.csv
 *api*key*.csv
 data/private/

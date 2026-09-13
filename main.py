@@ -1,43 +1,30 @@
-################################################################################
-################################### Library ####################################
-################################################################################
-
-
-import time
-import requests
-from concurrent.futures import ThreadPoolExecutor
 import csv
-import json
+from concurrent.futures import ThreadPoolExecutor
 import math
+import os
 import threading
-
 
 import tkinter as tk
 from tkinter import filedialog, messagebox
 from PIL import Image, ImageTk
-
-import os
-
+import requests
 
 
-
-################################################################################
-################################## Fonctions ###################################
-################################################################################
-
+OBSERVER_LATITUDE = os.getenv("N2YO_OBSERVER_LATITUDE", "0")
+OBSERVER_LONGITUDE = os.getenv("N2YO_OBSERVER_LONGITUDE", "0")
+OBSERVER_ALTITUDE = os.getenv("N2YO_OBSERVER_ALTITUDE", "0")
 
 class SatelliteInterface:
     def __init__(self, root):
         self.root = root
-        self.root.title("Satellite Tracker")
+        self.root.title("SpaceWatchers")
         self.root.geometry("700x500")
         self.root.configure(bg="#1a1a2e")
 
         self.filepath_satellite = None
         self.filepath_api_key = None
 
-        # Le fond d'origine n'est pas indispensable au fonctionnement et n'est
-        # pas distribué tant que ses droits de réutilisation ne sont pas établis.
+        # Le fond d'écran est facultatif et n'est pas inclus dans le dépôt.
         if os.path.exists("background.jpg"):
             self.bg_image = Image.open("background.jpg")
             self.bg_photo = ImageTk.PhotoImage(self.bg_image)
@@ -102,12 +89,19 @@ class SatelliteInterface:
         self.results_text.insert(tk.END, message)
 
 def main(fichier, api_key, display_results, update_progress):
+    def construire_url(norad_id, cle_api):
+        return (
+            "https://api.n2yo.com/rest/v1/satellite/positions/"
+            f"{norad_id}/{OBSERVER_LATITUDE}/{OBSERVER_LONGITUDE}/"
+            f"{OBSERVER_ALTITUDE}/1/&apiKey={cle_api}"
+        )
+
     def call_api(url):
         response = requests.get(url, timeout=25)
         return response.json()
 
     def affichage(resultats):
-        resultats_plus_proche = (Karatsuba(get_position(resultats)))
+        resultats_plus_proche = recherche_plus_proche(get_position(resultats))
         message = f'Les satellites "{resultats_plus_proche[1][0][0]}" et "{resultats_plus_proche[2][0][0]}" sont les plus proches, ils sont à une distance de {resultats_plus_proche[0]} km, et leurs coordonnées sont respectivement {resultats_plus_proche[1][1]} et {resultats_plus_proche[2][1]}'
         display_results(message)
 
@@ -130,9 +124,9 @@ def main(fichier, api_key, display_results, update_progress):
             lecteur_csv = csv.reader(f, delimiter=';')
             entete = next(lecteur_csv)
             entete = [colonne.strip() for colonne in entete]
-            index_E = entete.index('api id')
+            index_api = entete.index('api id')
             for ligne in lecteur_csv:
-                liste.append(ligne[index_E].strip())
+                liste.append(ligne[index_api].strip())
         return liste
 
     liste_norad_id = lire_csv(fichier)
@@ -140,41 +134,41 @@ def main(fichier, api_key, display_results, update_progress):
     nb_element = len(liste_norad_id)
     nb_compte = len(liste_api_key)
 
-    comte_menthe_et_cristaux = 0
-    comte_api = 0
+    nombre_recupere = 0
+    index_api = 0
     resultats = []
 
-    update_progress(f"Traitement en cours : {comte_menthe_et_cristaux} / {nb_element} satellites récupérés.")
+    update_progress(f"Traitement en cours : {nombre_recupere} / {nb_element} satellites récupérés.")
 
-    while comte_menthe_et_cristaux < nb_element:
+    while nombre_recupere < nb_element:
 
-
-        information = call_api(f"https://api.n2yo.com/rest/v1/satellite/positions/40018/43.633119/1.394142/0/1/&apiKey={liste_api_key[comte_api]}")
-        print(information,comte_menthe_et_cristaux)
+        information = call_api(construire_url(40018, liste_api_key[index_api]))
 
         if "info" in information:
             transaction = information['info']['transactionscount']
-            if comte_menthe_et_cristaux + (1000 - transaction) > nb_element:
-                with ThreadPoolExecutor(max_workers=nb_element - comte_menthe_et_cristaux) as executor:
+            if nombre_recupere + (1000 - transaction) > nb_element:
+                with ThreadPoolExecutor(max_workers=nb_element - nombre_recupere) as executor:
                     futures = {}
-                    for i in range(comte_menthe_et_cristaux, nb_element):
-                        futures[executor.submit(call_api, f"https://api.n2yo.com/rest/v1/satellite/positions/{liste_norad_id[i]}/43.633119/1.394142/0/1/&apiKey={liste_api_key[comte_api]}")] = f"https://api.n2yo.com/rest/v1/satellite/positions/{liste_norad_id[i]}/43.633119/1.394142/0/1/&apiKey={liste_api_key[comte_api]}"
+                    for i in range(nombre_recupere, nb_element):
+                        url = construire_url(liste_norad_id[i], liste_api_key[index_api])
+                        futures[executor.submit(call_api, url)] = liste_norad_id[i]
                     resultats += [future.result() for future in futures]
             else:
                 with ThreadPoolExecutor(max_workers=1000 - transaction) as executor:
                     futures = {}
                     for i in range(1000 - transaction):
-                        futures[executor.submit(call_api, f"https://api.n2yo.com/rest/v1/satellite/positions/{liste_norad_id[i + comte_menthe_et_cristaux]}/43.633119/1.394142/0/1/&apiKey={liste_api_key[comte_api]}")] = f"https://api.n2yo.com/rest/v1/satellite/positions/{liste_norad_id[i + comte_menthe_et_cristaux]}/43.633119/1.394142/0/1/&apiKey={liste_api_key[comte_api]}"
+                        index_satellite = i + nombre_recupere
+                        url = construire_url(liste_norad_id[index_satellite], liste_api_key[index_api])
+                        futures[executor.submit(call_api, url)] = liste_norad_id[index_satellite]
                     resultats += [future.result() for future in futures]
-            comte_menthe_et_cristaux += 1000 - transaction
+            nombre_recupere += 1000 - transaction
 
+        update_progress(f"Traitement en cours : {nombre_recupere} / {nb_element} satellites récupérés.")
 
-        update_progress(f"Traitement en cours : {comte_menthe_et_cristaux} / {nb_element} satellite récupéré.")
-
-        comte_api += 1
-        if comte_api >= nb_compte:
-            comte_api = 0
-    update_progress(f"Récupération des satellites finis : {nb_element} / {nb_element} satellite récupéré.")
+        index_api += 1
+        if index_api >= nb_compte:
+            index_api = 0
+    update_progress(f"Récupération terminée : {nb_element} / {nb_element} satellites récupérés.")
 
     affichage(resultats)
 
@@ -187,7 +181,7 @@ def get_position(information):
 
     return positions_satellite
 
-def Karatsuba(E: dict) -> tuple:
+def recherche_plus_proche(E: dict) -> tuple:
     if len(E) <= 3:
         return points_proches(E)
 
@@ -199,8 +193,8 @@ def Karatsuba(E: dict) -> tuple:
     E1 = {key: value for key, value in list(E_sorted.items())[:mediane]}
     E2 = {key: value for key, value in list(E_sorted.items())[mediane:]}
 
-    d1 = Karatsuba(E1)
-    d2 = Karatsuba(E2)
+    d1 = recherche_plus_proche(E1)
+    d2 = recherche_plus_proche(E2)
 
     delta = min(d1[0], d2[0])
     bande = {}
@@ -272,11 +266,6 @@ def same_item(satellite1, satellite2):
 
                 return True
     return False
-
-
-################################################################################
-################################### Programme ##################################
-################################################################################
 
 if __name__ == "__main__":
     root = tk.Tk()
